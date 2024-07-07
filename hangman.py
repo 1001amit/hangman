@@ -17,6 +17,74 @@ def display_word(word, guessed_letters):
             display += '_'
     return display
 
+def print_hangman(attempts):
+    hangman_stages = [
+        '''
+           ------
+           |    |
+           |
+           |
+           |
+           |
+        ------
+        ''',
+        '''
+           ------
+           |    |
+           |    O
+           |
+           |
+           |
+        ------
+        ''',
+        '''
+           ------
+           |    |
+           |    O
+           |    |
+           |
+           |
+        ------
+        ''',
+        '''
+           ------
+           |    |
+           |    O
+           |   /|
+           |
+           |
+        ------
+        ''',
+        '''
+           ------
+           |    |
+           |    O
+           |   /|\\
+           |
+           |
+        ------
+        ''',
+        '''
+           ------
+           |    |
+           |    O
+           |   /|\\
+           |   /
+           |
+        ------
+        ''',
+        '''
+           ------
+           |    |
+           |    O
+           |   /|\\
+           |   / \\
+           |
+        ------
+        '''
+    ]
+    print(hangman_stages[6 - attempts])
+
 def hangman():
     word = fetch_random_word()
     if word is None:
@@ -29,6 +97,7 @@ def hangman():
 
     print("Welcome to Hangman!")
     print(display_word(word, guessed_letters))
+    print_hangman(attempts)
 
     while not game_over:
         guess = input("Guess a letter: ").lower()
@@ -44,6 +113,7 @@ def hangman():
             print("Wrong guess. Attempts left:", attempts)
 
         print(display_word(word, guessed_letters))
+        print_hangman(attempts)
 
         if '_' not in display_word(word, guessed_letters):
             game_over = True
