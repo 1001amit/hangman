@@ -17,7 +17,7 @@ def display_word(word, guessed_letters):
             display += '_'
     return display
 
-def print_hangman(attempts):
+def print_hangman(attempts_left, max_attempts):
     hangman_stages = [
         '''
            ------
@@ -81,9 +81,59 @@ def print_hangman(attempts):
            |   / \\
            |
         ------
+        ''',
+        '''
+           ------
+           |    |
+           |    O1
+           |   /|\\
+           |   / \\
+           |
+        ------
+        ''','''
+           ------
+           |    |
+           |    O2
+           |   /|\\
+           |   / \\
+           |
+        ------
+        ''','''
+           ------
+           |    |
+           |    O3
+           |   /|\\
+           |   / \\
+           |
+        ------
+        ''','''
+           ------
+           |    |
+           |    O4
+           |   /|\\
+           |   / \\
+           |
+        ------
         '''
     ]
-    print(hangman_stages[6 - attempts])
+    stage_index = max_attempts - attempts_left
+    print(hangman_stages[stage_index])
+
+def choose_difficulty():
+    print("Choose a difficulty level:")
+    print("1. Easy (10 attempts)")
+    print("2. Medium (7 attempts)")
+    print("3. Hard (5 attempts)")
+    while True:
+        choice = input("Enter 1, 2, or 3: ")
+        if choice == '1':
+            return 10
+        elif choice == '2':
+            return 7
+        elif choice == '3':
+            return 5
+        else:
+            print("Invalid choice. Please enter 1, 2, or 3.")
 
 def hangman():
     word = fetch_random_word()
@@ -91,13 +141,14 @@ def hangman():
         print("Failed to fetch a random word. Please try again.")
         return
 
+    max_attempts = choose_difficulty()
     guessed_letters = []
-    attempts = 6
+    attempts_left = max_attempts
     game_over = False
 
     print("Welcome to Hangman!")
     print(display_word(word, guessed_letters))
-    print_hangman(attempts)
+    print_hangman(attempts_left, max_attempts)
 
     while not game_over:
         guess = input("Guess a letter: ").lower()
@@ -109,16 +160,16 @@ def hangman():
             print("Good guess!")
         else:
             guessed_letters.append(guess)
-            attempts -= 1
-            print("Wrong guess. Attempts left:", attempts)
+            attempts_left -= 1
+            print("Wrong guess. Attempts left:", attempts_left)
 
         print(display_word(word, guessed_letters))
-        print_hangman(attempts)
+        print_hangman(attempts_left, max_attempts)
 
         if '_' not in display_word(word, guessed_letters):
             game_over = True
             print("Congratulations, you won!")
-        elif attempts == 0:
+        elif attempts_left == 0:
             game_over = True
             print("Sorry, you lost. The word was:", word)
 
