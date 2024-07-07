@@ -135,13 +135,12 @@ def choose_difficulty():
         else:
             print("Invalid choice. Please enter 1, 2, or 3.")
 
-def hangman():
+def play_round(max_attempts):
     word = fetch_random_word()
     if word is None:
         print("Failed to fetch a random word. Please try again.")
-        return
+        return False
 
-    max_attempts = choose_difficulty()
     guessed_letters = []
     attempts_left = max_attempts
     game_over = False
@@ -169,9 +168,33 @@ def hangman():
         if '_' not in display_word(word, guessed_letters):
             game_over = True
             print("Congratulations, you won!")
+            return True
         elif attempts_left == 0:
             game_over = True
             print("Sorry, you lost. The word was:", word)
+            return False
+
+def hangman():
+    max_attempts = choose_difficulty()
+    rounds = 0
+    wins = 0
+    losses = 0
+
+    while True:
+        result = play_round(max_attempts)
+        rounds += 1
+        if result:
+            wins += 1
+        else:
+            losses += 1
+
+        print(f"Rounds played: {rounds}")
+        print(f"Wins: {wins}")
+        print(f"Losses: {losses}")
+
+        play_again = input("Do you want to play another round? (yes/no): ").lower()
+        if play_again != 'yes':
+            break
 
 if __name__ == "__main__":
     hangman()
